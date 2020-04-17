@@ -23,7 +23,7 @@ jobs:
       - run:
           name: 'Pylinting'
           command: |
-            . ./virtualenvs/tap-postgres/bin/activate
+            . ./virtualenvs/tap-zuora/bin/activate
             pylint --rcfile .pylintrc tap_zuora
 
 workflows:

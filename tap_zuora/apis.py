@@ -51,7 +51,6 @@ def format_datetime_zoql(datetime_str, date_format):
 class ExportFailed(Exception):
     pass
 
-# pylint: disable=missing-super-argument
 class ExportTimedOut(ExportFailed):
     def __init__(self, timeout, unit):
         super().__init__("Export failed (TimedOut): The job took longer than {} {}".format(timeout, unit))
@@ -210,10 +209,10 @@ class Aqua:
         if "message" in resp:
             if resp["message"] == SYNTAX_ERROR:
                 return "unavailable"
-            elif resp["message"] == NO_DELETED_SUPPORT:
+            if resp["message"] == NO_DELETED_SUPPORT:
                 return "available"
-            else:
-                raise Exception("Error probing {}: {}".format(stream_name, resp["message"]))
+
+            raise Exception("Error probing {}: {}".format(stream_name, resp["message"]))
 
         return "available_with_deleted"
 
@@ -224,10 +223,10 @@ class Aqua:
         data = client.aqua_request("GET", endpoint).json()
         if data["status"] == "completed":
             return True
-        elif data["status"] == "failed":
+        if data["status"] == "failed":
             raise ExportFailed(data["batches"][0]["message"])
-        else:
-            return False
+
+        return False
 
     # Must match call signature of other APIs
     @staticmethod
@@ -290,10 +289,10 @@ class Rest:
         data = client.rest_request("GET", endpoint).json()
         if data["Status"] == "Completed":
             return True
-        elif data["Status"] in ["Cancelled", "Failed"]:
+        if data["Status"] in ["Cancelled", "Failed"]:
             raise ExportFailed(data["StatusReason"])
-        else:
-            return False
+
+        return False
 
     # Must match call signature of other APIs
     @staticmethod

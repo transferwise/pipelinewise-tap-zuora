@@ -48,7 +48,8 @@ def clear_file_ids(state, stream):
     state["bookmarks"][stream["tap_stream_id"]].pop("file_ids", None)
     singer.write_state(state)
 
-def sync_file_ids(file_ids, client, state, stream, api, counter): # pylint: disable=too-many-branches
+# pylint: disable=too-many-branches,too-many-arguments,too-many-locals
+def sync_file_ids(file_ids, client, state, stream, api, counter):
     if stream.get("replication_key"):
         start_date = state["bookmarks"][stream["tap_stream_id"]][stream["replication_key"]]
     else:
@@ -133,7 +134,8 @@ def handle_aqua_timeout(ex, stream, state):
 
         half_day_range = (previous_window_end - window_start) // 2
         current_window_end = previous_window_end - half_day_range
-        state["bookmarks"][stream["tap_stream_id"]]["current_window_end"] = current_window_end.strftime("%Y-%m-%dT%H:%M:%SZ")
+        state["bookmarks"][stream["tap_stream_id"]]["current_window_end"] = current_window_end.strftime("%Y-%m-%dT%H"
+                                                                                                        ":%M:%SZ")
         singer.write_state(state)
 
 def sync_aqua_stream(client, state, stream, counter):
