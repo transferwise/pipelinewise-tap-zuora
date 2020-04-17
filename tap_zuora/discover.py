@@ -142,7 +142,7 @@ def discover_stream(client, stream_name, force_rest): # pylint: disable=too-many
     # If the entity is unavailable, we need to return None
     if status == "unavailable":
         return None
-    elif status == "available_with_deleted":
+    if status == "available_with_deleted":
         properties["Deleted"] = {"type": "boolean"}
         mdata = metadata.write(mdata, ('properties', 'Deleted'), 'inclusion', 'available')
 
