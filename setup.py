@@ -23,7 +23,7 @@ setup(name='pipelinewise-tap-zuora',
           'pendulum==1.2.0',
       ],
       extras_require={
-          'dev': [
+          'test': [
               'ipdb',
               'pylint'
           ]
