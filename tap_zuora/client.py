@@ -28,6 +28,7 @@ LOGGER = singer.get_logger()
 class ApiException(Exception):
     def __init__(self, resp):
         self.resp = resp
+        # pylint: disable=super-with-arguments
         super(ApiException, self).__init__("{0.status_code}: {0.content}".format(self.resp))
 
 
