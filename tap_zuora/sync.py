@@ -161,6 +161,8 @@ def sync_aqua_stream(client, state, stream, counter):
         LOGGER.info("Retrying timed out sync job...")
         return sync_aqua_stream(client, state, stream, counter)
 
+    return None
+
 def handle_rest_timeout(ex, stream, state, current_window, start_pen):
     if stream.get("replication_key"):
         LOGGER.info("Export timed out, reducing query window and writing state.")
@@ -183,8 +185,8 @@ def iterate_rest_query_window(client, state, stream, counter,
         timed_out = False
         while start_pen < sync_started:
             end_pen = start_pen.add(seconds=window_length)
-            if end_pen > sync_started:
-                end_pen = sync_started
+
+            end_pen = min(end_pen, sync_started)
 
             start_date = start_pen.strftime("%Y-%m-%d %H:%M:%S")
             end_date = end_pen.strftime("%Y-%m-%d %H:%M:%S")
